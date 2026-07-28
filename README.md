@@ -6,7 +6,7 @@ The website was designed to provide parents with a clean, modern experience whil
 
 ---
 
-## Project Overview
+## Overview
 
 This website was built to establish Moms on Teaching USA's online presence and communicate its tutoring services through a premium, user-friendly interface.
 
@@ -57,7 +57,9 @@ The design focuses on:
 - Contact
 - Locations
 
+![Home Page](images/screenshots/i1.png)
 ---
+![Home Page](images/screenshots/i2.png)
 
 ## Highlights
 
