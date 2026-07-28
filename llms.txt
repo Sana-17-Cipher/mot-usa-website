@@ -1,0 +1,27 @@
+# Moms on Teaching USA
+
+> Online 1-on-1 tutoring for Indian-American families across the United States, covering Indian Curriculum continuity (CBSE, ICSE, NIOS), US School Support (K-12 Math, Science, English), and Test Prep (SAT, ACT, AP, NEET, JEE), delivered by qualified mother-teachers.
+
+## Core Pages
+- [Home](https://usa.momsonteaching.com/): Overview of both service tracks and states covered
+- [About](https://usa.momsonteaching.com/about.html): Company story and Mother-Teacher philosophy
+- [All Services](https://usa.momsonteaching.com/services.html): Indian Curriculum, US School Support, and Test Prep tracks
+- [Indian Curriculum](https://usa.momsonteaching.com/services/indian-curriculum.html): CBSE, ICSE, NIOS tuition details
+- [US School Support](https://usa.momsonteaching.com/services/us-school-support.html): K-12 Math, Science, English tutoring details
+- [Test Prep](https://usa.momsonteaching.com/services/test-prep.html): SAT, ACT, AP, NEET, JEE preparation details
+- [New Jersey](https://usa.momsonteaching.com/locations/new-jersey.html): New Jersey-specific service details
+- [California](https://usa.momsonteaching.com/locations/california.html): California-specific service details
+- [Texas](https://usa.momsonteaching.com/locations/texas.html): Texas-specific service details
+- [Illinois](https://usa.momsonteaching.com/locations/illinois.html): Illinois-specific service details
+- [New York](https://usa.momsonteaching.com/locations/new-york.html): New York-specific service details
+- [Washington](https://usa.momsonteaching.com/locations/washington.html): Washington-specific service details
+- [FAQ](https://usa.momsonteaching.com/faq.html): Common questions answered
+- [Sitemap](https://usa.momsonteaching.com/sitemap.html): Full list of all pages on the site
+
+## Related
+- [Main Site](https://momsonteaching.com/): Moms on Teaching's primary website
+- [Gulf Site](https://gulf.momsonteaching.com/): Moms on Teaching's Gulf/NRI-focused subdomain
+
+## Optional
+- [Pricing](https://usa.momsonteaching.com/pricing.html)
+- [Contact](https://usa.momsonteaching.com/contact.html)
