@@ -71,7 +71,10 @@
     background: #faf5ed;
     padding-top: 70px;
   }
-  /* Hero image — RIGHT side, fills right ~62% */
+
+  /* Hero image — RIGHT side, fills right ~62%.
+     Declared here so mobile query only needs to override positioning,
+     not fight !important. */
   .hero-bg-image {
     position: absolute;
     top: 0; right: 0;
@@ -81,6 +84,7 @@
     object-position: center top;
     z-index: 1;
   }
+
   /* Parchment gradient fading from left into the image */
   .hero-left-fade {
     position: absolute;
@@ -91,7 +95,9 @@
     z-index: 2;
   }
 
-  /* Hero content — text on the left */
+  /* Hero content — text column on the left.
+     flex-direction: column + flex-grow: 1 on text-block mirrors the
+     "main { flex: 3 1 300px }" pattern from the reference layout. */
   .hero-content {
     position: relative;
     z-index: 5;
@@ -103,8 +109,9 @@
     min-height: calc(94vh - 70px);
   }
   .hero-text-block {
+    /* flex: 1 1 auto — grows to fill, shrinks when needed, no fixed basis */
+    flex: 1 1 auto;
     max-width: 480px;
-    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -121,15 +128,18 @@
     font-style: italic;
   }
   .hero-text-block .hero-desc {
-    font-size: 15px; line-height: 1.75;
+    font-size: 15px;
+    line-height: 1.75;
     color: #5a6a8a;
     margin: 0 0 30px;
     max-width: 400px;
   }
   .hero-cta-btn {
     display: inline-flex;
-    align-items: center; gap: 10px;
-    background: #152447; color: #FBF6EC;
+    align-items: center;
+    gap: 10px;
+    background: #152447;
+    color: #FBF6EC;
     font-weight: 700;
     padding: 14px 32px;
     border-radius: 50px;
@@ -137,7 +147,7 @@
     text-decoration: none;
     transition: all 0.3s ease;
     box-shadow: 0 4px 20px rgba(21,36,71,0.18);
-    width: fit-content;
+    width: fit-content; /* never stretch wider than content */
   }
   .hero-cta-btn:hover {
     background: #0D1830;
@@ -149,36 +159,52 @@
 
   /* ====== HERO BADGES ====== */
   .hero-badges {
-    display: flex; gap: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
     padding: 36px 0 44px;
-    position: relative; z-index: 5;
+    position: relative;
+    z-index: 5;
   }
   .hero-badge {
-    display: flex; flex-direction: column;
-    align-items: center; gap: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
     text-align: center;
   }
   .hero-badge-icon { width: 42px; height: 42px; }
   .hero-badge-text {
-    font-size: 12px; font-weight: 600;
-    color: #152447; max-width: 110px; line-height: 1.35;
+    font-size: 12px;
+    font-weight: 600;
+    color: #152447;
+    max-width: 110px;
+    line-height: 1.35;
   }
 
   /* ====== FLOATING ELEMENTS ====== */
   .floating-el {
-    position: absolute; z-index: 3;
+    position: absolute;
+    z-index: 3;
     pointer-events: none;
   }
   .floating-el svg { width: 100%; height: 100%; }
   .pink-blob { position: absolute; z-index: 3; pointer-events: none; }
+  /* dot-grid uses CSS Grid intrinsically — no breakpoint override needed */
   .dot-grid {
-    position: absolute; z-index: 3; pointer-events: none;
-    display: grid; grid-template-columns: repeat(5, 8px); gap: 10px;
+    position: absolute;
+    z-index: 3;
+    pointer-events: none;
+    display: grid;
+    grid-template-columns: repeat(5, 8px);
+    gap: 10px;
   }
   .dot-grid span {
-    width: 5px; height: 5px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    background: #7ECBC4; opacity: 0.5;
+    background: #7ECBC4;
+    opacity: 0.5;
   }
 
   @keyframes floatY { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-16px); } }
@@ -203,21 +229,21 @@
   }
   .wave-divider svg { display: block; width: 100%; height: auto; }
 
-  /* ====== RESPONSIVE — DESKTOP ====== */
-  /* ====== TABLET ====== */
-  @media (max-width:1024px) {
+  /* ====== TABLET — 64rem (≈1024px) ====== */
+  @media (max-width: 64rem) {
     .hero-content { padding: 50px 24px 0; }
-    .hero-text-block h1 { font-size: clamp(1.7rem,3.2vw,2.4rem); }
+    .hero-text-block h1 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); }
     .hero-bg-image { width: 55%; }
     .hero-left-fade { width: 58%; }
     .hero-badges { gap: 24px; }
+    /* Pinned cards: 3 → 2 columns using auto-fit + min() trick */
     .pinned-cards-row {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
       max-width: 800px;
     }
+    /* Map: keep side-by-side but let text block shrink */
+    .map-body { gap: 2rem; }
   }
-  /* ====== MOBILE (consolidated) ====== */
-
 
   /* ====== PINNED CARDS SECTION ====== */
   .pinned-section {
@@ -323,176 +349,160 @@
     pointer-events: none;
   }
 
-  @media (max-width:768px) {
-    .hero-section { 
-      min-height: 100vh; 
-      padding-top: 80px; 
-      padding-bottom: 0; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: flex-start; 
+  /* ====== MOBILE — 48rem (≈768px) ====== */
+  /* Principle: base CSS sets desktop layout cleanly so mobile only
+     needs to override what actually changes — no !important needed. */
+  @media (max-width: 48rem) {
+
+    /* -- HERO -- */
+    .hero-section {
+      min-height: 760px;
+      height: auto;
+      padding-top: 80px;
+      padding-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
       overflow: hidden;
-      position: relative;
     }
-    /* Show the hero image as full background on mobile */
-    .hero-bg-image { 
-      display: block !important;
-      position: absolute !important;
+    /* On mobile the image becomes a full bleed background */
+    .hero-bg-image {
       top: 0; right: 0; bottom: 0; left: 0;
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: cover;
+      width: 100%;
+      height: 100%;
       object-position: center bottom;
-      z-index: 1 !important;
     }
-    /* Overlay gradient so text is readable on top of image */
-    .hero-left-fade { 
-      display: block !important;
-      position: absolute !important;
-      top: 0; left: 0;
-      width: 100% !important;
-      height: 100% !important;
+    /* Fade overlay switches from horizontal (desktop) to vertical (mobile) */
+    .hero-left-fade {
+      width: 100%;
+      height: 100%;
       background: linear-gradient(
         to bottom,
         rgba(250,245,237,0.75) 0%,
         rgba(250,245,237,0.6) 35%,
         rgba(250,245,237,0.2) 65%,
         rgba(250,245,237,0) 100%
-      ) !important;
-      z-index: 2 !important;
+      );
     }
-    
     .hero-content {
-      padding: 0 24px;
+      padding: 0 32px;
       width: 100%;
       max-width: 100%;
       margin: 0;
       z-index: 10;
-      display: flex;
-      flex-direction: column;
       align-items: flex-start;
       text-align: left;
-      flex: 1;
-      justify-content: flex-start;
-      padding-top: 30px;
-      min-height: auto;
+      justify-content: center;
+      flex: 1 1 auto;
     }
-    
-    .hero-text-block { max-width: 75%; align-items: flex-start; display: flex; flex-direction: column; text-align: left; }
-    
-    .hero-text-block h1 { 
-      font-size: 30px; 
-      line-height: 1.15; 
+    .hero-text-block {
+      /* Let it be a bit wider on mobile to use space better */
+      flex: 0 1 85%;
+      max-width: 85%;
+      align-items: flex-start;
+      text-align: left;
+      padding-bottom: 60px; /* Offset to keep it visually centered above the background image subjects */
+    }
+    .hero-text-block h1 {
+      font-size: clamp(1.2rem, 5vw, 1.5rem);
+      line-height: 1.2;
       letter-spacing: -0.5px;
-      max-width: 100%;
-      margin: 0 0 16px; 
+      margin: 0 0 16px;
       font-weight: 600;
-      color: #152447;
     }
-    
-    .hero-text-block .hero-desc { 
-      font-size: 15px; 
-      line-height: 1.6; 
-      color: #5a6a8a;
+    .hero-text-block .hero-desc {
+      font-size: 12px;
+      line-height: 1.6;
       max-width: 100%;
       margin: 0 0 28px;
     }
-    
     .hero-cta-btn {
-      width: 200px;
-      height: 52px;
-      background: #152447;
-      color: white;
-      border-radius: 50px;
-      font-size: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      /* width: fit-content is already set in base; height via padding */
+      padding: 14px 28px;
+      font-size: 14px;
       margin: 0 0 24px;
     }
-    
     .hero-badges { display: none; }
-    
-    /* Decorative elements */
-    .dot-grid { display: none !important; }
-    .mobile-dot-top-left { 
-      display: none !important; 
-    }
-    
-    .hero-pink-blob { 
-      display: none !important;
-    }
+    .dot-grid { display: none; }
+    .mobile-dot-top-left { display: none; }
+    .hero-pink-blob { display: none; }
     .pink-blob-2 { display: none; }
-    
-    .hero-mobile-curve { display: none !important; }
-    
-    /* Hide separate mobile image — now using background image */
-    .hero-mobile-image-wrapper {
-      display: none !important;
-    }
-    
-    .wave-divider { display: none !important; }
+    .hero-mobile-curve { display: none; }
+    .hero-mobile-image-wrapper { display: none; }
+    .wave-divider { display: none; }
 
-    /* ====== PINNED CARDS — MOBILE ====== */
-    .pinned-section {
-      padding: 20px 16px 50px;
-    }
-    .pinned-section-title {
-      font-size: 1.6rem;
-      margin-bottom: 20px;
-    }
+    /* -- PINNED CARDS — single column via auto-fit + min() -- */
+    .pinned-section { padding: 20px 16px 50px; }
+    .pinned-section-title { font-size: 1.6rem; margin-bottom: 20px; }
     .pinned-cards-row,
     .pinned-cards-row.pinned-cards-row-2 {
-      grid-template-columns: 1fr !important;
-      max-width: 400px !important;
+      /* min(400px, 100%) ensures card never overflows viewport */
+      grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+      max-width: 440px;
       gap: 28px;
     }
-    .pinned-cards-row-2 {
-      margin-top: 28px !important;
-    }
-    .pinned-card {
-      padding: 28px 22px 22px;
-    }
+    .pinned-cards-row-2 { margin-top: 28px; }
+    .pinned-card { padding: 28px 22px 22px; }
     .pinned-card:nth-child(1),
     .pinned-card:nth-child(2),
-    .pinned-card:nth-child(3) {
-      transform: none !important;
-    }
+    .pinned-card:nth-child(3) { transform: none; }
 
-    /* ====== MAP SECTION — MOBILE ====== */
-    .map-section {
-      padding: 40px 20px 50px;
-      text-align: center;
+    /* -- MAP SECTION — stack text above map -- */
+    .map-section { padding: 40px 16px 40px; overflow: hidden; }
+    /* body becomes a single column */
+    .map-body {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .map-section-title {
-      font-size: 1.5rem;
+    .map-text-col {
+      flex: 0 0 auto;         /* reset desktop flex-basis so it sizes to content */
       text-align: center;
+      align-items: center;
+      max-width: 100%;
+      position: relative;
+      z-index: 10;
+      top: 0;               /* disable sticky on mobile */
+      padding: 0 4px;
     }
-    .map-section-sub {
-      font-size: 14px;
-      text-align: center;
-      padding: 0 8px;
+    .map-section-title { font-size: clamp(1.3rem, 5vw, 1.6rem); text-align: center; }
+    .map-section-sub { font-size: 13.5px; text-align: center; padding: 0 8px; max-width: 100%; }
+    .map-legend { justify-content: center; margin-top: 12px; }
+
+    .map-col {
+      flex: 0 0 auto;         /* reset desktop flex-basis */
+      width: calc(100% + 32px);   /* break out of the 16px padding on each side */
+      margin-left: -16px;
+      margin-right: -16px;
+      min-width: 0;
     }
-    .map-legend {
-      justify-content: center;
+    .map-container {
+      perspective: none !important;
+    }
+    .map-3d-wrapper {
+      transform: none !important;
+      transform-style: flat !important;
+      margin-top: 16px !important;
+      margin-bottom: 0 !important;
+      padding-bottom: 8px;
     }
     .map-contact-bar {
-      flex-direction: column !important;
-      align-items: center !important;
-      text-align: center !important;
-      padding: 20px 20px !important;
-      gap: 16px !important;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 18px 16px;
+      gap: 14px;
+      margin-top: 24px !important;
     }
     .map-contact-bar > div {
-      flex-direction: column !important;
-      align-items: center !important;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
     }
-    .map-contact-bar a {
-      width: 100%;
-      justify-content: center;
-    }
+    .map-contact-bar a { width: 100%; justify-content: center; }
+    /* Hide decorative blobs that overflow on mobile */
+    .map-section > .floating-el,
+    .map-section > .pink-blob { display: none; }
   }
 
   /* ====== USA MAP SECTION ====== */
@@ -501,25 +511,57 @@
     padding: 60px 24px 70px;
     position: relative;
   }
+
+  /* ── Side-by-side layout: text col (left) + map col (right)
+     Uses the same flex pattern as the reference code:
+       .container { display: flex; gap: 4rem; }
+       aside  { flex: 0 0 auto; align-self: flex-start; }
+       main   { flex: 3 1 300px; }
+     Both columns have a flex-basis so auto-fit kicks in at 48rem.
+  ────────────────────────────────────────────────────── */
+  .map-body {
+    display: flex;
+    flex-wrap: wrap;           /* wraps when viewport narrows */
+    gap: 3rem;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  /* Text column — grows up to ~38% of the row, shrinks gracefully */
+  .map-text-col {
+    flex: 1 1 280px;           /* flex: grow shrink basis */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: sticky;
+    top: 80px;                 /* sticky like the sidebar in the reference */
+    align-self: flex-start;
+  }
+  /* Map column — takes the remaining space, minimum 300px */
+  .map-col {
+    flex: 3 1 300px;
+    position: relative;
+    min-width: 0;              /* prevents flex blowout */
+  }
+
   .map-section-title {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(1.8rem, 3vw, 2.4rem);
     color: #152447;
-    text-align: center;
+    text-align: left;
     margin: 0 0 8px;
   }
   .map-section-sub {
-    text-align: center;
+    text-align: left;
     color: #5a6a8a;
     font-size: 15px;
-    margin: 0 0 10px; /* Reduced space */
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 0 16px;
+    max-width: 380px;
   }
+
+  /* Map 3-D container */
   .map-container {
-    max-width: 900px;
-    margin: 0 auto;
+    width: 100%;               /* fills .map-col */
     position: relative;
     perspective: 1400px;
   }
@@ -541,11 +583,11 @@
   }
   .map-layer.base { position: relative; }
   .map-layer.thickness .us-state {
-    filter: brightness(0.85); /* Darkens the sides to create depth */
+    filter: brightness(0.85);
     pointer-events: none;
   }
   .map-layer.shadow-layer .us-state {
-    fill: #000 !important;
+    fill: #000;
     filter: blur(12px) opacity(0.12);
     pointer-events: none;
   }
@@ -593,11 +635,12 @@
     background: #152447;
   }
   .map-tooltip.visible { opacity: 1; }
+
+  /* Legend sits inside .map-text-col on desktop */
   .map-legend {
     display: flex;
-    justify-content: center;
     gap: 24px;
-    margin-top: 32px;
+    margin-top: 24px;
     flex-wrap: wrap;
   }
   .map-legend-item {
@@ -984,13 +1027,34 @@
     </svg>
   </div>
 
-  <div style="text-align:center;margin-bottom:16px;position:relative;z-index:2;" class="reveal">
-    <span style="background:rgba(21,36,71,0.06);color:#152447;font-size:11px;font-weight:700;padding:6px 16px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;">Our Presence</span>
-  </div>
-  <h2 class="map-section-title reveal" style="position:relative;z-index:2;">Across the USA, For Every Child</h2>
-  <p class="map-section-sub reveal" style="position:relative;z-index:2;">Explore our locations and discover how we're making a difference in communities across the United States.</p>
+  <!-- map-body: flex row on desktop (text-col sticky left, map-col grows right),
+       collapses to column at 48rem via media query — same pattern as reference code -->
+  <div class="map-body">
 
-  <div class="map-container reveal">
+    <!-- ── LEFT: text column (sticky, like sidebar in reference) ── -->
+    <div class="map-text-col">
+      <div style="margin-bottom:16px;position:relative;z-index:2;" class="reveal">
+        <span style="background:rgba(21,36,71,0.06);color:#152447;font-size:11px;font-weight:700;padding:6px 16px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;">Our Presence</span>
+      </div>
+      <h2 class="map-section-title reveal" style="position:relative;z-index:2;">Across the USA, For Every Child</h2>
+      <p class="map-section-sub reveal" style="position:relative;z-index:2;">Explore our locations and discover how we're making a difference in communities across the United States.</p>
+
+      <!-- Legend lives in the text column on desktop, centred on mobile -->
+      <div class="map-legend reveal">
+        <div class="map-legend-item">
+          <div class="map-legend-dot" style="background:#E8A63C;"></div>
+          Active Presence
+        </div>
+        <div class="map-legend-item">
+          <div class="map-legend-dot" style="background:#ddd5c8;"></div>
+          Coming Soon
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: map column (flex: 3 1 300px — takes remaining space) ── -->
+    <div class="map-col reveal">
+  <div class="map-container">
     <div class="map-tooltip" id="mapTooltip"></div>
     <div class="map-3d-wrapper" id="map3dWrapper">
       <svg viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg" id="usMapBase" class="map-layer base">
@@ -1121,21 +1185,12 @@
       </g>
       </svg>
     </div>
-  </div>
+  </div><!-- /.map-container -->
+    </div><!-- /.map-col -->
 
-  <!-- Legend -->
-  <div class="map-legend reveal">
-    <div class="map-legend-item">
-      <div class="map-legend-dot" style="background:#E8A63C;"></div>
-      Active Presence
-    </div>
-    <div class="map-legend-item">
-      <div class="map-legend-dot" style="background:#ddd5c8;"></div>
-      Coming Soon
-    </div>
-  </div>
+  </div><!-- /.map-body -->
 
-  <!-- Contact Us Bar -->
+  <!-- Contact Us Bar — full width, below both columns -->
   <div class="map-contact-bar reveal" style="max-width:720px;margin:36px auto 0;background:#ffffff;border-radius:16px;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 4px 20px rgba(21,36,71,0.08);border:1px solid rgba(21,36,71,0.06);flex-wrap:wrap;">
     <div style="display:flex;align-items:center;gap:14px;">
       <div style="width:44px;height:44px;border-radius:50%;background:rgba(126,203,196,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -1219,7 +1274,7 @@
   <div class="max-w-2xl mx-auto px-6 reveal">
     <h2 class="font-display text-3xl mb-4">Ready to See the Difference?</h2>
     <p class="text-parchment/80 mb-8">Book a free demo class — no commitment, just a chance to meet your child's tutor.</p>
-    <a href="tel:+1XXXXXXXXXX" class="bg-marigold hover:bg-marigold-dark text-navy font-semibold px-8 py-4 rounded-full inline-block transition">Book Your Free Demo Class</a>
+ 
   </div>
 </section>
 
